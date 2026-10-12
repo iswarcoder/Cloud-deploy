@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Deploy - Profile</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="user">
+  <main class="profile-page" id="profile-page" aria-busy="true">
+    <div class="profile-shell">
+      <header class="profile-nav">
+        <a class="brand" href="dashboard.html"><span class="brand-mark">✦</span> Cloud Deploy</a>
+        <div class="profile-nav-actions">
+          <a class="btn btn-ghost" href="dashboard.html">Back to dashboard</a>
+          <button id="logout-button" class="btn btn-secondary" type="button">Log out</button>
+        </div>
+      </header>
+
+      <section class="profile-hero card" aria-labelledby="profile-title">
+        <div class="profile-hero-glow"></div>
+        <div class="profile-hero-content">
+          <div class="profile-avatar profile-avatar-large" id="profile-avatar" aria-hidden="true"><span>CD</span></div>
+          <div class="profile-identity">
+            <div class="eyebrow">Account profile</div>
+            <h1 id="profile-title"><span id="profile-name">Loading profile</span></h1>
+            <p class="profile-email"><span class="verified-dot">✓</span><span id="profile-email">Verified Cognito account</span></p>
+            <div class="profile-badges"><span class="profile-badge"><span class="status-pulse"></span> Active account</span><span class="profile-badge profile-badge-soft">Private workspace</span></div>
+          </div>
+          <div class="profile-hero-actions"><button id="edit-profile" class="btn btn-primary" type="button">Edit profile</button></div>
+        </div>
+      </section>
+
+      <div id="profile-status" class="profile-status" role="status" aria-live="polite"></div>
+      <div class="profile-error-row"><p id="profile-error" class="error-text" role="alert" hidden></p><button id="retry-profile" class="btn btn-secondary" type="button" hidden>Retry loading</button></div>
+
+      <div class="profile-layout">
+        <div class="profile-main">
+          <section class="card completion-card">
+            <div class="section-heading"><div><div class="eyebrow">Profile strength</div><h2>Make your profile feel complete</h2></div><strong id="profile-completion">0% complete</strong></div>
+            <div class="profile-progress" id="profile-progress" role="progressbar" aria-label="Profile completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+            <p class="muted" id="completion-copy">Complete your profile to help your team recognize you.</p>
+          </section>
+
+          <form id="profile-form" class="profile-form card" novalidate>
+            <div class="section-heading"><div><div class="eyebrow">Account details</div><h2 id="profile-edit-heading">Profile details</h2></div><span class="profile-lock">Protected by Cognito</span></div>
+            <fieldset>
+              <legend>Personal information</legend>
+              <div class="profile-form-grid">
+                <label>Full name<input name="fullName" maxlength="120" autocomplete="name" placeholder="Your full name" required></label>
+                <label>Phone number<input name="phone" type="tel" maxlength="30" autocomplete="tel" placeholder="+91 98765 43210"></label>
+                <label>Verified login email<input name="email" type="email" autocomplete="email" readonly aria-describedby="email-note"><small id="email-note">Managed by your Cognito account</small></label>
+                <label>Location<input name="location" maxlength="160" autocomplete="address-level2" placeholder="City, country"></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Education / company</legend>
+              <div class="profile-form-grid"><label>College or company<input name="company" maxlength="160" autocomplete="organization" placeholder="Where you work or study"></label><label>Avatar URL<input name="avatarUrl" type="url" placeholder="https://example.com/avatar.png"></label></div>
+            </fieldset>
+            <fieldset>
+              <legend>Social links</legend>
+              <div class="profile-form-grid">
+                <label>Personal website<input name="website" type="url" placeholder="https://example.com"></label>
+                <label>GitHub<input name="githubUrl" type="url" placeholder="https://github.com/username"></label>
+                <label>Instagram<input name="instagramUrl" type="url" placeholder="https://instagram.com/username"></label>
+                <label>Facebook<input name="facebookUrl" type="url" placeholder="https://facebook.com/username"></label>
+                <label>LinkedIn<input name="linkedinUrl" type="url" placeholder="https://linkedin.com/in/username"></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>About me</legend><label>Short bio<textarea name="bio" maxlength="500" rows="5" placeholder="Tell your team a little about yourself"></textarea><small>Up to 500 characters</small></label></fieldset>
+            <div class="profile-form-actions"><button id="cancel-profile" class="btn btn-secondary" type="button" hidden>Cancel</button><button id="save-profile" class="btn btn-primary" type="submit" hidden>Save changes</button></div>
+          </form>
+        </div>
+
+        <aside class="profile-sidebar">
+          <section class="card profile-preview-card">
+            <div class="section-heading"><div><div class="eyebrow">Live preview</div><h2>How others see you</h2></div><span class="preview-dot"></span></div>
+            <div class="preview-person"><div class="profile-avatar" id="preview-avatar" aria-hidden="true"><span>CD</span></div><div><h3 id="preview-name">Cloud Deploy member</h3><p id="preview-meta" class="muted">Complete your profile details</p></div></div>
+            <p id="preview-bio" class="preview-bio">Add a short introduction to help your team know you.</p>
+            <div class="social-links" aria-label="Social links">
+              <a data-social="website" href="#" aria-label="Personal website" title="Personal website">↗</a>
+              <a data-social="githubUrl" href="#" aria-label="GitHub" title="GitHub">GH</a>
+              <a data-social="instagramUrl" href="#" aria-label="Instagram" title="Instagram">◎</a>
+              <a data-social="facebookUrl" href="#" aria-label="Facebook" title="Facebook">f</a>
+              <a data-social="linkedinUrl" href="#" aria-label="LinkedIn" title="LinkedIn">in</a>
+            </div>
+          </section>
+          <section class="card privacy-card"><span class="privacy-icon">✦</span><h2>Your profile, your control</h2><p class="muted">Your profile is associated with your verified Cognito identity. Only you can read or update it.</p></section>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <div id="profile-success-popup" class="profile-success-popup" hidden>
+    <div class="profile-success-overlay" data-close-profile-popup></div>
+    <section class="profile-success-dialog" role="dialog" aria-modal="true" aria-labelledby="profile-success-title" aria-describedby="profile-success-message">
+      <div class="profile-success-icon" aria-hidden="true">✓</div>
+      <h2 id="profile-success-title">Profile Saved Successfully!</h2>
+      <p id="profile-success-message">Your profile details have been saved successfully.</p>
+      <button id="profile-success-ok" class="btn btn-primary" type="button">OK</button>
+    </section>
+  </div>
+  <script src="js/auth.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

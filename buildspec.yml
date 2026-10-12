@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - npm ci
+      - npm ci --prefix backend
+  build:
+    commands:
+      - npm run test:backend
+      - >-
+        node -e 'const { execFileSync } = require("node:child_process"); const fs = require("node:fs"); const path = require("node:path"); function check(dir) { for (const entry of fs.readdirSync(dir, { withFileTypes: true })) { const file = path.join(dir, entry.name); if (entry.isDirectory()) check(file); else if (file.endsWith(".js")) execFileSync(process.execPath, ["--check", file], { stdio: "inherit" }); } } for (const dir of ["frontend/js", "backend/src", "backend/scripts", "backend/tests"]) check(dir);'
+
+artifacts:
+  base-directory: .
+  files:
+    - index.html
+    - README.md
+    - frontend/**/*
+    - backend/Dockerfile
+    - backend/package.json
+    - backend/package-lock.json
+    - backend/.env.example
+    - backend/src/**/*
