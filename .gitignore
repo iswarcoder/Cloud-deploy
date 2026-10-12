@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 node_modules/
 .env
 .env.*
@@ -12,3 +13,19 @@ coverage/
 crash.log
 *.tfvars
 !.example.tfvars
+=======
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+dist/
+coverage/
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+!.example.tfvars
+>>>>>>> origin/main
