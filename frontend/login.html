@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Deploy - Sign in</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="card auth-card" aria-labelledby="login-title">
+      <a class="brand" href="index.html">Cloud Deploy</a>
+      <div id="auth-status" class="auth-status" role="status">
+        <h1 id="login-title">Sign in to Cloud Deploy</h1>
+        <p class="muted">Use your Cognito account to access your private workspace.</p>
+        <button id="login-button" class="btn btn-primary" type="button">Continue with Cognito</button>
+      </div>
+    </section>
+  </main>
+  <script src="js/auth.js"></script>
+  <script>
+    const status = document.querySelector("#auth-status");
+    const button = document.querySelector("#login-button");
+    const params = new URLSearchParams(location.search);
+    function showError(title, detail) {
+      const message = document.createElement("p");
+      message.className = "error-text";
+      message.textContent = detail;
+      status.replaceChildren(
+        Object.assign(document.createElement("h1"), { textContent: title }),
+        message,
+        Object.assign(document.createElement("button"), { id: "retry-login", className: "btn btn-primary", type: "button", textContent: "Try again" })
+      );
+      document.querySelector("#retry-login").addEventListener("click", () => {
+        status.innerHTML = "<h1>Opening sign-in...</h1><p class='muted'>Preparing a secure PKCE session.</p>";
+        CloudDeployAuth.beginLogin().catch(error => showError("Sign-in unavailable", error.message));
+      });
+    }
+    async function start() {
+      if (params.has("code")) {
+        button?.remove();
+        status.innerHTML = "<h1>Signing you in...</h1><p class='muted'>Verifying your Cognito session.</p>";
+        try {
+          await CloudDeployAuth.exchangeCode(params.get("code"), params.get("state"));
+          location.replace("dashboard.html");
+        } catch (error) {
+          showError("Sign-in failed", error.message);
+        }
+        return;
+      }
+      if (params.get("error")) {
+        const errorMessage = document.createElement("p");
+        errorMessage.className = "error-text";
+        errorMessage.textContent = params.get("error_description") || "Cognito sign-in was cancelled.";
+        status.append(errorMessage);
+      }
+      button.addEventListener("click", () => {
+        status.innerHTML = "<h1>Opening sign-in...</h1><p class='muted'>Preparing a secure PKCE session.</p>";
+        CloudDeployAuth.beginLogin().catch(error => showError("Sign-in unavailable", error.message));
+      });
+      if (location.origin !== CloudDeployAuth.config.frontendOrigin) {
+        showError("Use the local HTTP server", `Open ${CloudDeployAuth.config.callbackUrl} instead of this file URL. PKCE state is scoped to the browser origin.`);
+      }
+    }
+    start();
+  </script>
+</body>
+</html>

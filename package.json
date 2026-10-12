@@ -1,0 +1,14 @@
+{
+  "name": "cloud-deploy-x",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names backend,frontend --prefix-colors blue,cyan \"npm --prefix backend run dev\" \"python -m http.server 5500\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "python -m http.server 5500",
+    "test:backend": "npm --prefix backend test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
